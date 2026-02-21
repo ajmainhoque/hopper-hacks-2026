@@ -1,0 +1,86 @@
+/* ============================================================
+   WitWand — Pixel-Art UI Components
+   Retro pixel-style elements for the battle interface
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+/* ── Pixel Border ──────────────────────────────────────────── */
+.pixel-border {
+  border: var(--pixel-border);
+  box-shadow: var(--pixel-shadow);
+}
+
+/* ── Pixel Button ──────────────────────────────────────────── */
+.pixel-button {
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  padding: 0.6em 1.4em;
+  background: var(--gold);
+  color: var(--bg-primary);
+  border: var(--pixel-border);
+  box-shadow: var(--pixel-shadow);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.pixel-button:hover {
+  background: var(--gold-light);
+}
+
+.pixel-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.pixel-button:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  filter: grayscale(60%);
+}
+
+/* ── Pixel Panel ───────────────────────────────────────────── */
+.pixel-panel {
+  background: var(--bg-panel);
+  border: var(--pixel-border);
+  box-shadow: var(--pixel-shadow);
+  padding: 1rem 1.25rem;
+}
+
+/* ── Pixel Typography ──────────────────────────────────────── */
+.pixel-text {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+
+.pixel-heading {
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--gold);
+}
+
+/* ── Character Avatar ──────────────────────────────────────── */
+.char-avatar {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--pixel-border);
+  box-shadow: var(--pixel-shadow);
+  background: var(--bg-card);
+  font-family: var(--font-pixel);
+  font-size: 2rem;
+  color: var(--gold);
+}
+
+.char-avatar.dead {
+  filter: grayscale(100%);
+  opacity: 0.4;
+}

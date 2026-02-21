@@ -1,0 +1,61 @@
+/* ============================================================
+   WitWand — Theme Variables
+   Dark magical pixel-art theme for a Harry Potter coding battle
+   ============================================================ */
+
+:root {
+  /* ── Backgrounds ─────────────────────────────────────────── */
+  --bg-primary:   #0a0a1a;
+  --bg-secondary: #1a1a2e;
+  --bg-card:      #16213e;
+  --bg-panel:     #0f3460;
+
+  /* ── Accent: Gold ────────────────────────────────────────── */
+  --gold:         #ffd700;
+  --gold-light:   #ffe457;
+  --gold-dark:    #c9a800;
+
+  /* ── Accent: Purple ──────────────────────────────────────── */
+  --purple:       #9b59b6;
+  --purple-light: #c39bd3;
+  --purple-dark:  #6c3483;
+
+  /* ── Accent: Red ─────────────────────────────────────────── */
+  --red:          #e74c3c;
+  --red-light:    #f1948a;
+  --red-dark:     #922b21;
+
+  /* ── Accent: Green ───────────────────────────────────────── */
+  --green:        #2ecc71;
+  --green-light:  #82e0aa;
+  --green-dark:   #1e8449;
+
+  /* ── Accent: Blue ────────────────────────────────────────── */
+  --blue:         #3498db;
+  --blue-light:   #85c1e9;
+  --blue-dark:    #1a5276;
+
+  /* ── House Colors ────────────────────────────────────────── */
+  --gryffindor:        #ae0001;
+  --gryffindor-accent: #eeba30;
+  --slytherin:         #1a472a;
+  --slytherin-accent:  #5d5d5d;
+
+  /* ── Text ────────────────────────────────────────────────── */
+  --text-primary:   #f0e6d3;
+  --text-secondary: #a89b8c;
+  --text-muted:     #6c6355;
+
+  /* ── Borders & Shadows ───────────────────────────────────── */
+  --pixel-border:  2px solid var(--gold);
+  --pixel-shadow:  4px 4px 0 rgba(0, 0, 0, 0.5);
+
+  /* ── Typography ──────────────────────────────────────────── */
+  --font-pixel: "Press Start 2P", monospace;
+  --font-body:  "Inter", "Segoe UI", system-ui, sans-serif;
+
+  /* ── Transitions ─────────────────────────────────────────── */
+  --transition-fast:   0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow:   0.5s ease;
+}
