@@ -1,0 +1,45 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: #e8d5a3;
+  background-color: #0a0a1a;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --deep-purple: #1a0a2e;
+  --parchment: #e8d5a3;
+  --parchment-dark: #c4a96a;
+  --dark-bg: #0a0a1a;
+  --card-bg: rgba(20, 10, 40, 0.85);
+  --border-gold: rgba(201, 168, 76, 0.4);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at center top, #1a0a2e 0%, #0a0a1a 60%);
+}
+
+h1, h2, h3 {
+  margin: 0;
+}
+
+button {
+  border-radius: 6px;
+  border: 1px solid var(--border-gold);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
