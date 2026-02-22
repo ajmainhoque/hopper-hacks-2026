@@ -4,21 +4,26 @@
    ============================================================ */
 
 :root {
-  /* ── Backgrounds ─────────────────────────────────────────── */
-  --bg-primary:   #0a0a1a;
-  --bg-secondary: #1a1a2e;
-  --bg-card:      #16213e;
-  --bg-panel:     #0f3460;
+  /* ── Backgrounds (dark green-black, Forbidden Forest) ───── */
+  --bg-primary:   #060d06;
+  --bg-secondary: #0d1a0d;
+  --bg-card:      #0f1f12;
+  --bg-panel:     #132a1a;
 
-  /* ── Accent: Gold ────────────────────────────────────────── */
-  --gold:         #ffd700;
-  --gold-light:   #ffe457;
-  --gold-dark:    #c9a800;
+  /* ── Accent: Gryffindor Gold (primary accent) ────────────── */
+  --gold:         #eeba30;
+  --gold-light:   #f5d060;
+  --gold-dark:    #b8922a;
 
-  /* ── Accent: Purple ──────────────────────────────────────── */
-  --purple:       #9b59b6;
-  --purple-light: #c39bd3;
-  --purple-dark:  #6c3483;
+  /* ── Accent: Silver ─────────────────────────────────────── */
+  --silver:       #c0c0c0;
+  --silver-light: #e0e0e0;
+  --silver-dark:  #808080;
+
+  /* ── Accent: Purple (deeper, mystical) ──────────────────── */
+  --purple:       #7a4a9a;
+  --purple-light: #9a6abf;
+  --purple-dark:  #5a2a7a;
 
   /* ── Accent: Red ─────────────────────────────────────────── */
   --red:          #e74c3c;
@@ -39,12 +44,16 @@
   --gryffindor:        #ae0001;
   --gryffindor-accent: #eeba30;
   --slytherin:         #1a472a;
-  --slytherin-accent:  #5d5d5d;
+  --slytherin-accent:  #c0c0c0;
+  --ravenclaw:         #3498db;
+  --ravenclaw-accent:  #946b2d;
+  --hufflepuff:        #ecb939;
+  --hufflepuff-accent: #372e29;
 
-  /* ── Text ────────────────────────────────────────────────── */
-  --text-primary:   #f0e6d3;
-  --text-secondary: #a89b8c;
-  --text-muted:     #6c6355;
+  /* ── Text (silver-green tint) ───────────────────────────── */
+  --text-primary:   #d0e0d0;
+  --text-secondary: #8a9a8a;
+  --text-muted:     #4a6a4a;
 
   /* ── Borders & Shadows ───────────────────────────────────── */
   --pixel-border:  2px solid var(--gold);

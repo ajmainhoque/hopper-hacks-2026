@@ -1,7 +1,7 @@
 import { StatusEffect } from '../engine/types';
 
 const STATUS_COLORS: Record<string, string> = {
-  DEFENDING: '#f39c12',
+  DEFENDING: '#ecb939',
   DODGE_NEXT: '#2ecc71',
   STUNNED: '#e74c3c',
   POISON: '#8e44ad',

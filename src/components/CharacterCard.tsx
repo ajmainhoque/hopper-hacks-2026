@@ -20,37 +20,32 @@ export function CharacterCard({ charState, isActive, isTargetable, onSelect }: C
       onClick={isTargetable ? onSelect : undefined}
       className={`${isActive ? 'char-active' : ''}`}
       style={{
-        padding: 12,
-        background: charState.isAlive ? 'rgba(26, 26, 62, 0.8)' : 'rgba(26, 26, 62, 0.3)',
-        border: `2px solid ${isTargetable ? '#ffd700' : isActive ? '#ffd700' : '#333'}`,
+        padding: 14,
+        background: charState.isAlive ? 'rgba(13, 26, 13, 0.8)' : 'rgba(13, 26, 13, 0.3)',
+        border: `2px solid ${isTargetable ? '#eeba30' : isActive ? '#eeba30' : '#1a3a1a'}`,
         borderRadius: 4,
         opacity: charState.isAlive ? 1 : 0.4,
         cursor: isTargetable ? 'pointer' : 'default',
         transition: 'all 0.3s ease',
-        width: 180,
+        width: 240,
         filter: charState.isAlive ? 'none' : 'grayscale(100%)',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
         <div style={{
-          width: 48,
-          height: 48,
-          background: def.cssColor,
-          border: '2px solid #ffd700',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: "'Press Start 2P', monospace",
-          fontSize: '16px',
-          color: '#fff',
+          width: 64,
+          height: 64,
+          border: '2px solid #eeba30',
+          overflow: 'hidden',
+          imageRendering: 'pixelated',
         }}>
-          {def.initial}
+          <img src={def.image} alt={def.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div>
-          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: '8px', color: '#ffd700', marginBottom: 4 }}>
+          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: '10px', color: '#eeba30', marginBottom: 4 }}>
             {def.name}
           </div>
-          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: '6px', color: '#a0a0b0' }}>
+          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: '8px', color: '#8a9a8a' }}>
             {def.role}
           </div>
         </div>

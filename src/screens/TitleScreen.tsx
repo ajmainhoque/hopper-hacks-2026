@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CodingLanguage } from '../coding/types';
+import { audioManager } from '../audio/audioManager';
 import '../styles/theme.css';
 import '../styles/pixel.css';
 import '../styles/animations.css';
@@ -21,7 +22,12 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
   const [p2Name, setP2Name] = useState('Player 2');
   const [language, setLanguage] = useState<CodingLanguage>('python');
 
+  useEffect(() => {
+    audioManager.playMusic('title');
+  }, []);
+
   const handleStart = () => {
+    audioManager.playSFX('buttonClick');
     const name1 = p1Name.trim() || 'Player 1';
     const name2 = p2Name.trim() || 'Player 2';
     onStart(name1, name2, language);
@@ -34,7 +40,10 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
         position: 'relative',
         width: '100vw',
         height: '100vh',
-        background: '#0a0a1a',
+        backgroundImage: 'url(/title-bg.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundColor: '#060d06',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -43,7 +52,7 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
         fontFamily: '"Press Start 2P", monospace',
       }}
     >
-      {/* Starfield background */}
+      {/* Dark overlay for readability */}
       <div
         style={{
           position: 'absolute',
@@ -51,50 +60,34 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
           left: 0,
           width: '100%',
           height: '100%',
+          background: 'rgba(0, 0, 0, 0.6)',
           pointerEvents: 'none',
           zIndex: 0,
         }}
-      >
-        {Array.from({ length: 60 }).map((_, i) => (
-          <div
-            key={i}
-            className="twinkle"
-            style={{
-              position: 'absolute',
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, #ffffff 0%, #ffffff88 40%, transparent 70%)',
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${Math.random() * 2 + 1.5}s`,
-            }}
-          />
-        ))}
-      </div>
+      />
 
       {/* Game Title */}
-      <div style={{ zIndex: 1, textAlign: 'center' }}>
-        <h1
+      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+        <img
           className="float"
+          src="/title.png"
+          alt="WitWand"
           style={{
-            fontSize: '4rem',
-            color: '#ffd700',
-            textShadow: '0 0 20px #ffd70088, 0 4px 0 #b8860b, 0 6px 0 #8b6508',
-            marginBottom: '0.5rem',
-            letterSpacing: '0.2em',
+            width: '560px',
+            maxWidth: '90vw',
             imageRendering: 'pixelated',
+            marginBottom: '0',
+            filter: 'drop-shadow(0 0 20px #eeba3044)',
+            pointerEvents: 'none',
           }}
-        >
-          WitWand
-        </h1>
+        />
 
         <p
           style={{
             fontSize: '0.85rem',
-            color: '#c0a0ff',
-            textShadow: '0 0 8px #c0a0ff66',
+            color: '#9a6abf',
+            textShadow: '0 0 8px #9a6abf66',
+            marginTop: '-7rem',
             marginBottom: '3rem',
             letterSpacing: '0.1em',
           }}
@@ -116,7 +109,7 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
             <label
               style={{
                 fontSize: '0.65rem',
-                color: '#88ccff',
+                color: '#eeba30',
                 minWidth: '120px',
                 textAlign: 'right',
               }}
@@ -133,19 +126,19 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
                 fontFamily: '"Press Start 2P", monospace',
                 fontSize: '0.7rem',
                 padding: '10px 14px',
-                background: '#1a1a2e',
-                border: '3px solid #88ccff',
+                background: '#0d1a0d',
+                border: '3px solid #eeba30',
                 color: '#ffffff',
                 outline: 'none',
                 imageRendering: 'pixelated',
                 width: '200px',
               }}
               onFocus={(e) => {
-                e.target.style.borderColor = '#ffd700';
-                e.target.style.boxShadow = '0 0 10px #ffd70044';
+                e.target.style.borderColor = '#f5d060';
+                e.target.style.boxShadow = '0 0 10px #eeba3044';
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = '#88ccff';
+                e.target.style.borderColor = '#eeba30';
                 e.target.style.boxShadow = 'none';
               }}
             />
@@ -155,7 +148,7 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
             <label
               style={{
                 fontSize: '0.65rem',
-                color: '#ff8888',
+                color: '#c0c0c0',
                 minWidth: '120px',
                 textAlign: 'right',
               }}
@@ -172,19 +165,19 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
                 fontFamily: '"Press Start 2P", monospace',
                 fontSize: '0.7rem',
                 padding: '10px 14px',
-                background: '#1a1a2e',
-                border: '3px solid #ff8888',
+                background: '#1a1a1a',
+                border: '3px solid #c0c0c0',
                 color: '#ffffff',
                 outline: 'none',
                 imageRendering: 'pixelated',
                 width: '200px',
               }}
               onFocus={(e) => {
-                e.target.style.borderColor = '#ffd700';
-                e.target.style.boxShadow = '0 0 10px #ffd70044';
+                e.target.style.borderColor = '#e0e0e0';
+                e.target.style.boxShadow = '0 0 10px #c0c0c044';
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = '#ff8888';
+                e.target.style.borderColor = '#c0c0c0';
                 e.target.style.boxShadow = 'none';
               }}
             />
@@ -193,21 +186,21 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
 
         {/* Language Selector */}
         <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-          <label style={{ fontSize: '0.65rem', color: '#c0a0ff', display: 'block', marginBottom: '0.8rem' }}>
+          <label style={{ fontSize: '0.65rem', color: '#9a6abf', display: 'block', marginBottom: '0.8rem' }}>
             CODING LANGUAGE:
           </label>
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {LANGUAGE_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
-                onClick={() => setLanguage(opt.value)}
+                onClick={() => { audioManager.playSFX('buttonClick'); setLanguage(opt.value); }}
                 style={{
                   fontFamily: '"Press Start 2P", monospace',
                   fontSize: '0.55rem',
                   padding: '8px 14px',
-                  background: language === opt.value ? opt.color : '#1a1a2e',
-                  color: language === opt.value ? (opt.value === 'javascript' ? '#1a1a2e' : '#fff') : '#888',
-                  border: `2px solid ${language === opt.value ? opt.color : '#333'}`,
+                  background: language === opt.value ? opt.color : '#0d1a0d',
+                  color: language === opt.value ? (opt.value === 'javascript' ? '#060d06' : '#fff') : '#8a9a8a',
+                  border: `2px solid ${language === opt.value ? opt.color : '#2a3a2a'}`,
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                   boxShadow: language === opt.value ? `0 0 12px ${opt.color}44` : 'none',
@@ -227,23 +220,23 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart }) => {
             fontFamily: '"Press Start 2P", monospace',
             fontSize: '1rem',
             padding: '16px 48px',
-            background: '#ffd700',
-            color: '#1a1a2e',
-            border: '4px solid #b8860b',
+            background: '#eeba30',
+            color: '#060d06',
+            border: '4px solid #b8922a',
             cursor: 'pointer',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
             imageRendering: 'pixelated',
-            boxShadow: '0 4px 0 #8b6508, 0 0 20px #ffd70044',
+            boxShadow: '0 4px 0 #8a6a1a, 0 0 20px #eeba3044',
             transition: 'transform 0.1s, box-shadow 0.1s',
           }}
           onMouseDown={(e) => {
             (e.target as HTMLButtonElement).style.transform = 'translateY(4px)';
-            (e.target as HTMLButtonElement).style.boxShadow = '0 0 0 #8b6508, 0 0 20px #ffd70044';
+            (e.target as HTMLButtonElement).style.boxShadow = '0 0 0 #8a6a1a, 0 0 20px #eeba3044';
           }}
           onMouseUp={(e) => {
             (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
-            (e.target as HTMLButtonElement).style.boxShadow = '0 4px 0 #8b6508, 0 0 20px #ffd70044';
+            (e.target as HTMLButtonElement).style.boxShadow = '0 4px 0 #8a6a1a, 0 0 20px #eeba3044';
           }}
         >
           Start Game

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GameState } from '../engine/types';
 import { getCharDef } from '../engine/gameState';
 import { BASE_HP } from '../engine/constants';
+import { audioManager } from '../audio/audioManager';
 
 interface VictoryScreenProps {
   winnerName: string;
@@ -10,9 +11,14 @@ interface VictoryScreenProps {
 }
 
 const VictoryScreen: React.FC<VictoryScreenProps> = ({ winnerName, gameState, onPlayAgain }) => {
+  useEffect(() => {
+    audioManager.playMusic('victory');
+    audioManager.playSFX('victory');
+  }, []);
+
   return (
     <div style={{
-      width: '100vw', height: '100vh', background: '#0a0a1a',
+      width: '100vw', height: '100vh', background: '#060d06',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       fontFamily: "'Press Start 2P', monospace", color: '#fff', position: 'relative', overflow: 'hidden',
     }}>
@@ -24,7 +30,7 @@ const VictoryScreen: React.FC<VictoryScreenProps> = ({ winnerName, gameState, on
             top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`,
             width: `${Math.random() * 4 + 2}px`, height: `${Math.random() * 4 + 2}px`,
             borderRadius: '50%',
-            background: 'radial-gradient(circle, #ffd700 0%, #ffd70088 40%, transparent 70%)',
+            background: 'radial-gradient(circle, #eeba30 0%, #eeba3088 40%, transparent 70%)',
             animationDelay: `${Math.random() * 3}s`, animationDuration: `${Math.random() * 2 + 1}s`,
           }} />
         ))}
@@ -32,8 +38,8 @@ const VictoryScreen: React.FC<VictoryScreenProps> = ({ winnerName, gameState, on
 
       <div style={{ zIndex: 1, textAlign: 'center' }}>
         <div className="float" style={{
-          fontSize: '40px', color: '#ffd700',
-          textShadow: '0 0 30px #ffd70088, 0 0 60px #ffd70044, 0 4px 0 #b8860b',
+          fontSize: '40px', color: '#eeba30',
+          textShadow: '0 0 30px #eeba3088, 0 0 60px #eeba3044, 0 4px 0 #b8922a',
           marginBottom: 16, letterSpacing: '0.15em',
         }}>VICTORY!</div>
 
@@ -48,17 +54,17 @@ const VictoryScreen: React.FC<VictoryScreenProps> = ({ winnerName, gameState, on
             const charIndices = player.characters;
             return (
               <div key={pIdx} style={{
-                padding: 20, border: `3px solid ${isWinner ? '#ffd700' : '#333'}`,
-                background: isWinner ? '#2a2a1e' : '#1a1a2e', minWidth: 200,
-                boxShadow: isWinner ? '0 0 20px #ffd70033' : 'none',
+                padding: 20, border: `3px solid ${isWinner ? '#eeba30' : '#1a3a1a'}`,
+                background: isWinner ? '#1a1508' : '#0d1a0d', minWidth: 200,
+                boxShadow: isWinner ? '0 0 20px #eeba3033' : 'none',
               }}>
                 <div style={{
-                  fontSize: '10px', color: isWinner ? '#ffd700' : pIdx === 0 ? '#88ccff' : '#ff8888',
+                  fontSize: '10px', color: isWinner ? '#eeba30' : pIdx === 0 ? '#eeba30' : '#c0c0c0',
                   textAlign: 'center', marginBottom: 16, paddingBottom: 8,
-                  borderBottom: `2px solid ${isWinner ? '#ffd70044' : '#333'}`,
+                  borderBottom: `2px solid ${isWinner ? '#eeba3044' : '#1a3a1a'}`,
                 }}>
                   {player.name}
-                  {isWinner && <span style={{ display: 'block', fontSize: '7px', color: '#ffd700', marginTop: 4 }}>WINNER</span>}
+                  {isWinner && <span style={{ display: 'block', fontSize: '7px', color: '#eeba30', marginTop: 4 }}>WINNER</span>}
                 </div>
                 {charIndices.map((charIdx) => {
                   const charState = gameState.characters[charIdx];
@@ -74,10 +80,10 @@ const VictoryScreen: React.FC<VictoryScreenProps> = ({ winnerName, gameState, on
                         {!charState.isAlive && <span style={{ color: '#e74c3c', fontSize: '7px' }}>KO</span>}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <div style={{ flex: 1, height: 8, background: '#222', border: '1px solid #444' }}>
+                        <div style={{ flex: 1, height: 8, background: '#0a1a0a', border: '1px solid #444' }}>
                           <div style={{
                             width: `${hpPct}%`, height: '100%',
-                            background: !charState.isAlive ? '#444' : hpPct > 50 ? '#2ecc71' : hpPct > 25 ? '#f39c12' : '#e74c3c',
+                            background: !charState.isAlive ? '#444' : hpPct > 50 ? '#2ecc71' : hpPct > 25 ? '#ecb939' : '#e74c3c',
                           }} />
                         </div>
                         <span style={{ fontSize: '7px', color: charState.isAlive ? '#aaa' : '#666', minWidth: 50, textAlign: 'right' }}>
@@ -92,11 +98,11 @@ const VictoryScreen: React.FC<VictoryScreenProps> = ({ winnerName, gameState, on
           })}
         </div>
 
-        <button className="pixel-button" onClick={onPlayAgain} style={{
+        <button className="pixel-button" onClick={() => { audioManager.playSFX('buttonClick'); onPlayAgain(); }} style={{
           fontFamily: "'Press Start 2P', monospace", fontSize: '14px',
-          padding: '16px 44px', background: '#ffd700', color: '#1a1a2e',
-          border: '4px solid #b8860b', cursor: 'pointer', textTransform: 'uppercase',
-          letterSpacing: '0.1em', boxShadow: '0 4px 0 #8b6508, 0 0 20px #ffd70044',
+          padding: '16px 44px', background: '#eeba30', color: '#0d1a0d',
+          border: '4px solid #b8922a', cursor: 'pointer', textTransform: 'uppercase',
+          letterSpacing: '0.1em', boxShadow: '0 4px 0 #8a6a1a, 0 0 20px #eeba3044',
         }}>Play Again</button>
       </div>
     </div>

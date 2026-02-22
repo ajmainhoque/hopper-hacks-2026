@@ -19,11 +19,11 @@
   100% { box-shadow: 0 0 0 rgba(46, 204, 113, 0); }
 }
 
-/* Spell cast — scale up with purple glow */
+/* Spell cast — scale up with deep purple glow */
 @keyframes spell-cast {
-  0%   { transform: scale(1);   box-shadow: 0 0 0 rgba(155, 89, 182, 0); }
-  50%  { transform: scale(1.15); box-shadow: 0 0 20px 8px rgba(155, 89, 182, 0.7); }
-  100% { transform: scale(1);   box-shadow: 0 0 0 rgba(155, 89, 182, 0); }
+  0%   { transform: scale(1);   box-shadow: 0 0 0 rgba(122, 74, 154, 0); }
+  50%  { transform: scale(1.15); box-shadow: 0 0 20px 8px rgba(122, 74, 154, 0.7); }
+  100% { transform: scale(1);   box-shadow: 0 0 0 rgba(122, 74, 154, 0); }
 }
 
 /* Twinkle — subtle opacity flicker */
@@ -35,15 +35,15 @@
 
 /* Active glow — pulsing gold aura for the current turn */
 @keyframes active-glow {
-  0%   { box-shadow: 0 0 6px 2px rgba(255, 215, 0, 0.4); }
-  50%  { box-shadow: 0 0 18px 6px rgba(255, 215, 0, 0.8); }
-  100% { box-shadow: 0 0 6px 2px rgba(255, 215, 0, 0.4); }
+  0%   { box-shadow: 0 0 6px 2px rgba(238, 186, 48, 0.4); }
+  50%  { box-shadow: 0 0 18px 6px rgba(238, 186, 48, 0.8); }
+  100% { box-shadow: 0 0 6px 2px rgba(238, 186, 48, 0.4); }
 }
 
 /* Float — gentle vertical bob */
 @keyframes float {
   0%   { transform: translateY(0); }
-  50%  { transform: translateY(-6px); }
+  50%  { transform: translateY(-16px); }
   100% { transform: translateY(0); }
 }
 
@@ -75,6 +75,40 @@
   }
 }
 
+/* Idle bob — 16-bit RPG breathing: feet pinned, body squash/stretch from bottom */
+@keyframes idle-bob {
+  0%   { transform: scaleY(1); }
+  50%  { transform: scaleY(1.015); }
+  100% { transform: scaleY(1); }
+}
+
+/* Attack lunge right — team 1 attacks toward right */
+@keyframes attack-lunge-right {
+  0%   { transform: translateX(0) translateY(0); }
+  20%  { transform: translateX(-10px) translateY(0); }
+  50%  { transform: translateX(80px) translateY(-8px); }
+  65%  { transform: translateX(80px) translateY(-8px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+/* Attack lunge left — team 2 attacks toward left */
+@keyframes attack-lunge-left {
+  0%   { transform: translateX(0) translateY(0); }
+  20%  { transform: translateX(10px) translateY(0); }
+  50%  { transform: translateX(-80px) translateY(-8px); }
+  65%  { transform: translateX(-80px) translateY(-8px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+/* Hurt recoil — knocked back when hit */
+@keyframes hurt-recoil {
+  0%   { transform: translateX(0); filter: brightness(1); }
+  15%  { filter: brightness(2); }
+  30%  { transform: translateX(-12px); filter: brightness(1.5); }
+  60%  { transform: translateX(6px); filter: brightness(1); }
+  100% { transform: translateX(0); filter: brightness(1); }
+}
+
 /* ── Utility Classes ───────────────────────────────────────── */
 
 .damage-hit {
@@ -98,10 +132,186 @@
   animation: shake 0.4s ease-out;
 }
 
+/* Character sprite idle animation — transform-origin bottom keeps feet planted */
+.sprite-idle {
+  animation: idle-bob 0.8s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Stagger the idle animation per character for natural look */
+.sprite-idle-delay-1 {
+  animation: idle-bob 0.85s ease-in-out infinite;
+  animation-delay: 0.15s;
+  transform-origin: bottom center;
+}
+.sprite-idle-delay-2 {
+  animation: idle-bob 0.9s ease-in-out infinite;
+  animation-delay: 0.3s;
+  transform-origin: bottom center;
+}
+.sprite-idle-delay-3 {
+  animation: idle-bob 0.75s ease-in-out infinite;
+  animation-delay: 0.45s;
+  transform-origin: bottom center;
+}
+
+/* Attack animations */
+.sprite-attack-right {
+  animation: attack-lunge-right 0.6s ease-in-out forwards;
+  transform-origin: bottom center;
+}
+
+.sprite-attack-left {
+  animation: attack-lunge-left 0.6s ease-in-out forwards;
+  transform-origin: bottom center;
+}
+
+.sprite-hurt {
+  animation: hurt-recoil 0.5s ease-out;
+  transform-origin: bottom center;
+}
+
+/* Defeated sprite */
+.sprite-defeated {
+  opacity: 0.3;
+  filter: grayscale(100%) brightness(0.5);
+  transform: translateY(10px);
+  transform-origin: bottom center;
+  transition: all 0.5s ease;
+}
+
 .fade-in {
   animation: fadeIn 0.4s ease-out both;
 }
 
 .slide-up {
   animation: slideUp 0.5s ease-out both;
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ── Result Popup ─────────────────────────────────────────── */
+
+/* Scale-in entrance for the popup card */
+@keyframes popup-enter {
+  0%   { opacity: 0; transform: scale(0.5); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Pulsing glow behind the popup icon */
+@keyframes popup-glow {
+  0%   { box-shadow: 0 0 10px 4px currentColor; }
+  50%  { box-shadow: 0 0 30px 12px currentColor; }
+  100% { box-shadow: 0 0 10px 4px currentColor; }
+}
+
+/* Sparkle float-up particles */
+@keyframes sparkle-rise {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-60px) scale(0.3); }
+}
+
+.result-popup-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(4, 8, 4, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.result-popup-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 48px;
+  border-radius: 4px;
+  animation: popup-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.result-popup-card.correct {
+  border: 3px solid #2ecc71;
+  background: linear-gradient(135deg, #0a2a12 0%, #0d3318 50%, #0a2a12 100%);
+}
+
+.result-popup-card.incorrect {
+  border: 3px solid #e74c3c;
+  background: linear-gradient(135deg, #2a0a0a 0%, #331010 50%, #2a0a0a 100%);
+}
+
+.result-popup-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  animation: popup-glow 1.5s ease-in-out infinite;
+}
+
+.result-popup-icon.correct {
+  color: #2ecc71;
+  background: rgba(46, 204, 113, 0.15);
+}
+
+.result-popup-icon.incorrect {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.15);
+}
+
+.result-popup-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+}
+
+.result-popup-title.correct { color: #2ecc71; }
+.result-popup-title.incorrect { color: #e74c3c; }
+
+.result-popup-detail {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #8a9a8a;
+}
+
+.result-popup-mana {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #9a6abf;
+  margin-top: 4px;
+}
+
+/* Sparkle particles for correct answers */
+.result-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #eeba30;
+  animation: sparkle-rise 1s ease-out forwards;
+}
+
+/* AI explanation box */
+.result-explanation {
+  margin-top: 10px;
+  padding: 10px 12px;
+  max-height: 100px;
+  overflow-y: auto;
+  background: rgba(6, 13, 6, 0.7);
+  border: 1px solid #2a5a2a;
+  border-radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  line-height: 1.8;
+  color: #9a6abf;
+  text-align: left;
+  animation: fadeIn 0.3s ease-out;
 }

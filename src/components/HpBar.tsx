@@ -5,10 +5,10 @@ interface HpBarProps {
 
 export function HpBar({ current, max }: HpBarProps) {
   const pct = Math.max(0, Math.min(100, (current / max) * 100));
-  const color = pct > 50 ? '#27ae60' : pct > 25 ? '#f39c12' : '#e74c3c';
+  const color = pct > 50 ? '#27ae60' : pct > 25 ? '#ecb939' : '#e74c3c';
 
   return (
-    <div style={{ width: '100%', background: '#1a1a2e', border: '2px solid #333', height: 16, position: 'relative' }}>
+    <div style={{ width: '100%', background: '#0d1a0d', border: '2px solid #1a3a1a', height: 16, position: 'relative' }}>
       <div style={{
         width: `${pct}%`,
         height: '100%',
