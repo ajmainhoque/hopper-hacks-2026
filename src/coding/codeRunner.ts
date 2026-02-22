@@ -1,5 +1,10 @@
 import { CodingProblem, ExecutionResult, CodingLanguage } from './types';
-import { evaluateCodeWithGemini } from './geminiClient';
+import { executePython } from './pythonRunner';
+import { executePiston } from './pistonRunner';
+
+function allTestCases(problem: CodingProblem) {
+  return [...problem.testCases, ...(problem.hiddenTestCases || [])];
+}
 
 function executeJavaScript(userCode: string, problem: CodingProblem): Promise<ExecutionResult> {
   return new Promise((resolve) => {
@@ -8,11 +13,13 @@ function executeJavaScript(userCode: string, problem: CodingProblem): Promise<Ex
       { type: 'module' }
     );
 
+    const tests = allTestCases(problem);
+
     const timeout = setTimeout(() => {
       worker.terminate();
       resolve({
         passed: false,
-        totalTests: problem.testCases.length + problem.hiddenTestCases.length,
+        totalTests: tests.length,
         passedTests: 0,
         results: [],
         error: 'Execution timed out (5 seconds)',
@@ -30,7 +37,7 @@ function executeJavaScript(userCode: string, problem: CodingProblem): Promise<Ex
       worker.terminate();
       resolve({
         passed: false,
-        totalTests: problem.testCases.length + problem.hiddenTestCases.length,
+        totalTests: tests.length,
         passedTests: 0,
         results: [],
         error: String(err.message || err),
@@ -40,34 +47,18 @@ function executeJavaScript(userCode: string, problem: CodingProblem): Promise<Ex
     worker.postMessage({
       userCode,
       functionName: problem.functionName,
-      testCases: [...problem.testCases, ...problem.hiddenTestCases],
+      testCases: tests,
     });
   });
-}
-
-async function executeWithGemini(userCode: string, problem: CodingProblem, language: CodingLanguage): Promise<ExecutionResult> {
-  try {
-    const evalResult = await evaluateCodeWithGemini(userCode, problem, language);
-    return {
-      passed: evalResult.passed,
-      totalTests: evalResult.results.length,
-      passedTests: evalResult.results.filter(r => r.passed).length,
-      results: evalResult.results,
-    };
-  } catch (error) {
-    return {
-      passed: false,
-      totalTests: problem.testCases.length + problem.hiddenTestCases.length,
-      passedTests: 0,
-      results: [],
-      error: `Evaluation error: ${error}. Make sure VITE_GEMINI_API_KEY is set for non-JavaScript languages.`,
-    };
-  }
 }
 
 export function executeCode(userCode: string, problem: CodingProblem, language: CodingLanguage): Promise<ExecutionResult> {
   if (language === 'javascript') {
     return executeJavaScript(userCode, problem);
   }
-  return executeWithGemini(userCode, problem, language);
+  if (language === 'python') {
+    return executePython(userCode, problem);
+  }
+  // C, C++, Java — execute via Piston API (with LLM fallback for complex C signatures)
+  return executePiston(userCode, problem, language);
 }

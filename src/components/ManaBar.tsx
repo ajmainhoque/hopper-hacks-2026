@@ -7,7 +7,7 @@ export function ManaBar({ current, max }: ManaBarProps) {
   const pct = Math.max(0, Math.min(100, (current / max) * 100));
 
   return (
-    <div style={{ width: '100%', background: '#1a1a2e', border: '2px solid #333', height: 12, position: 'relative' }}>
+    <div style={{ width: '100%', background: '#0d1a0d', border: '2px solid #1a3a1a', height: 12, position: 'relative' }}>
       <div style={{
         width: `${pct}%`,
         height: '100%',

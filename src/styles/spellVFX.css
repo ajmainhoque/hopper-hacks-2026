@@ -1,0 +1,170 @@
+/* ============================================================
+   Spell VFX — Magic particle effects for battle actions
+   ============================================================ */
+
+/* Container covers the target sprite area */
+.vfx-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+  overflow: visible;
+}
+
+/* ── Central Flash ────────────────────────────────────────── */
+
+.vfx-flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.vfx-flash-attack {
+  animation: vfx-flash-in 0.5s ease-out forwards;
+}
+
+.vfx-flash-heal {
+  animation: vfx-flash-heal 0.7s ease-out forwards;
+}
+
+.vfx-flash-shield {
+  animation: vfx-flash-shield 0.6s ease-out forwards;
+}
+
+@keyframes vfx-flash-in {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  30%  { opacity: 0.9; transform: translate(-50%, -50%) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
+}
+
+@keyframes vfx-flash-heal {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  40%  { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); }
+}
+
+@keyframes vfx-flash-shield {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  25%  { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+  50%  { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* ── Slash Lines (Physical Attack) ────────────────────────── */
+
+.vfx-slash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffffff, #ffffffcc, transparent);
+  transform-origin: center;
+  opacity: 0;
+}
+
+.vfx-slash-1 {
+  animation: vfx-slash-anim 0.3s ease-out 0.0s forwards;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+.vfx-slash-2 {
+  animation: vfx-slash-anim 0.3s ease-out 0.08s forwards;
+  transform: translate(-50%, -50%) rotate(15deg);
+}
+.vfx-slash-3 {
+  animation: vfx-slash-anim 0.3s ease-out 0.15s forwards;
+  transform: translate(-50%, -50%) rotate(-10deg);
+}
+
+@keyframes vfx-slash-anim {
+  0%   { opacity: 0; clip-path: inset(0 100% 0 0); }
+  30%  { opacity: 1; clip-path: inset(0 0 0 0); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; clip-path: inset(0 0 0 0); }
+}
+
+/* ── Magic Particles ──────────────────────────────────────── */
+
+.vfx-particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+/* Burst outward for attack spells */
+.vfx-particle-burst {
+  animation: vfx-particle-burst-anim 0.5s ease-out forwards;
+}
+
+/* Rise upward for healing */
+.vfx-particle-rise {
+  animation: vfx-particle-rise-anim 0.7s ease-out forwards;
+}
+
+@keyframes vfx-particle-burst-anim {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  20%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% {
+    opacity: 0;
+    transform: translate(
+      calc(-50% + var(--burst-x, 0px)),
+      calc(-50% + var(--burst-y, 0px))
+    ) scale(0.3);
+  }
+}
+
+@keyframes vfx-particle-rise-anim {
+  0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+  30%  { opacity: 1; transform: translateY(-10px) scale(1); }
+  100% { opacity: 0; transform: translateY(-40px) scale(0.2); }
+}
+
+/* ── Magic Ring ───────────────────────────────────────────── */
+
+.vfx-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  height: 30%;
+  border: 2px solid;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: vfx-ring-expand 0.6s ease-out forwards;
+}
+
+@keyframes vfx-ring-expand {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  30%  { opacity: 0.8; transform: translate(-50%, -50%) scale(0.8); }
+  60%  { opacity: 0.5; transform: translate(-50%, -50%) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); }
+}
+
+/* ── Screen Flash (for big spells) ────────────────────────── */
+
+.vfx-screen-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0;
+  animation: vfx-screen-flash-anim 0.4s ease-out forwards;
+}
+
+@keyframes vfx-screen-flash-anim {
+  0%   { opacity: 0; }
+  15%  { opacity: 0.3; }
+  100% { opacity: 0; }
+}

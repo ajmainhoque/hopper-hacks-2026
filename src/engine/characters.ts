@@ -70,6 +70,7 @@ const harry: CharacterDef = {
   items: harryItems,
   cssColor: '#740001',
   initial: 'H',
+  image: '/characters/harry.png',
 };
 
 // ─── Hermione Granger ─────────────────────────────────────────────────────────
@@ -139,6 +140,7 @@ const hermione: CharacterDef = {
   items: hermioneItems,
   cssColor: '#ae0001',
   initial: 'Hr',
+  image: '/characters/hermione.png',
 };
 
 // ─── Ron Weasley ──────────────────────────────────────────────────────────────
@@ -208,6 +210,7 @@ const ron: CharacterDef = {
   items: ronItems,
   cssColor: '#d3a625',
   initial: 'R',
+  image: '/characters/ron.png',
 };
 
 // ─── Lord Voldemort ───────────────────────────────────────────────────────────
@@ -281,6 +284,7 @@ const voldemort: CharacterDef = {
   items: voldemortItems,
   cssColor: '#1a472a',
   initial: 'V',
+  image: '/characters/voldemort.png',
 };
 
 // ─── Rubeus Hagrid ────────────────────────────────────────────────────────────
@@ -350,6 +354,7 @@ const hagrid: CharacterDef = {
   items: hagridItems,
   cssColor: '#6b3a2a',
   initial: 'Hg',
+  image: '/characters/hagrid.png',
 };
 
 // ─── Bellatrix Lestrange ──────────────────────────────────────────────────────
@@ -422,6 +427,7 @@ const bellatrix: CharacterDef = {
   items: bellatrixItems,
   cssColor: '#2d1a4e',
   initial: 'B',
+  image: '/characters/bellatrix.png',
 };
 
 // ─── Exports ──────────────────────────────────────────────────────────────────

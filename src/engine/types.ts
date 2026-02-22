@@ -10,7 +10,7 @@ export type StatusEffectType =
 export type ActionType = 'ATTACK' | 'SPELL' | 'ITEM' | 'DEFEND' | 'DO_NOTHING';
 export type Phase = 'CHARACTER_SELECT' | 'CODING' | 'ACTION' | 'FINISHED';
 export type TargetType = 'ENEMY_SINGLE' | 'ALLY_SINGLE' | 'ENEMY_ALL' | 'ALLY_ALL' | 'SELF' | 'BOTH_ALLIES' | 'BOTH_ENEMIES';
-export type Difficulty = 'EASY' | 'HARD';
+export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD';
 
 export interface Spell {
   id: string;
@@ -50,6 +50,7 @@ export interface CharacterDef {
   items: [Item, Item];
   cssColor: string;
   initial: string;
+  image: string;
 }
 
 export interface StatusEffect {

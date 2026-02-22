@@ -14,7 +14,9 @@ export function useTimer(durationSeconds: number, onExpire: () => void) {
         if (prev <= 1) {
           clearInterval(interval);
           setIsRunning(false);
-          onExpireRef.current();
+          // Call onExpire outside the setState updater to avoid
+          // "Cannot update a component while rendering" errors
+          setTimeout(() => onExpireRef.current(), 0);
           return 0;
         }
         return prev - 1;
@@ -29,8 +31,24 @@ export function useTimer(durationSeconds: number, onExpire: () => void) {
     setIsRunning(true);
   }, [durationSeconds]);
 
+  const startWith = useCallback((seconds: number) => {
+    setSecondsLeft(seconds);
+    setIsRunning(true);
+  }, []);
+
   const stop = useCallback(() => {
     setIsRunning(false);
+  }, []);
+
+  const pause = useCallback(() => {
+    setIsRunning(false);
+  }, []);
+
+  const resume = useCallback(() => {
+    setSecondsLeft(prev => {
+      if (prev > 0) setIsRunning(true);
+      return prev;
+    });
   }, []);
 
   const reset = useCallback(() => {
@@ -38,5 +56,5 @@ export function useTimer(durationSeconds: number, onExpire: () => void) {
     setIsRunning(false);
   }, [durationSeconds]);
 
-  return { secondsLeft, isRunning, start, stop, reset };
+  return { secondsLeft, isRunning, start, startWith, stop, pause, resume, reset };
 }

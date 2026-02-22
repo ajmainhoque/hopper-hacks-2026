@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { CodingProblem, ExecutionResult, CodingLanguage } from '../coding/types';
+import { Difficulty } from '../engine/types';
 import { problemCache } from '../coding/problemCache';
 import { executeCode } from '../coding/codeRunner';
 
@@ -9,7 +10,7 @@ export function useCodingPhase(language: CodingLanguage) {
   const [result, setResult] = useState<ExecutionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const loadProblem = useCallback(async (difficulty: 'EASY' | 'HARD') => {
+  const loadProblem = useCallback(async (difficulty: Difficulty) => {
     setIsLoading(true);
     setResult(null);
     setError(null);

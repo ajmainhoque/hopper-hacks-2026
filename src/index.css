@@ -11,7 +11,7 @@ html, body {
 }
 
 body {
-  background: #0a0a1a;
+  background: #060d06;
   color: #e8e8e8;
   font-family: 'Press Start 2P', monospace;
   -webkit-font-smoothing: antialiased;
@@ -28,14 +28,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a1a;
+  background: #060d06;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #1a3a1a;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #2a5a2a;
 }

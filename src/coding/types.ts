@@ -7,7 +7,7 @@ export interface TestCase {
 
 export interface CodingProblem {
   id: string;
-  difficulty: 'EASY' | 'HARD';
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
   title: string;
   description: string;
   functionName: string;

@@ -1,5 +1,5 @@
 import { GameState, CodingResult } from './types';
-import { EASY_MANA_REWARD, HARD_MANA_REWARD, MAX_MANA } from './constants';
+import { EASY_MANA_REWARD, MEDIUM_MANA_REWARD, HARD_MANA_REWARD, MAX_MANA } from './constants';
 import { cloneState, getLivingChars, isTeamDefeated } from './gameState';
 import { tickStatusEffects } from './statusEffects';
 
@@ -18,7 +18,7 @@ export function endCodingPhase(
   for (let p = 0; p < 2; p++) {
     const result = results[p as 0 | 1];
     if (result && result.passed) {
-      const reward = result.difficulty === 'EASY' ? EASY_MANA_REWARD : HARD_MANA_REWARD;
+      const reward = result.difficulty === 'EASY' ? EASY_MANA_REWARD : result.difficulty === 'MEDIUM' ? MEDIUM_MANA_REWARD : HARD_MANA_REWARD;
       const livingChars = getLivingChars(newState, p as 0 | 1);
       for (const charIdx of livingChars) {
         newState.characters[charIdx].mana = Math.min(
