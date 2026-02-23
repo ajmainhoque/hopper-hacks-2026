@@ -228,7 +228,7 @@ const BattleScreen: React.FC<BattleScreenProps> = ({
         setVfxType(effectType);
       }, 250);
       // Trigger hurt animation and damage SFX on target after a short delay
-      if (action.targetIndex !== undefined && action.type !== 'DEFEND') {
+      if (action.targetIndex !== undefined) {
         setTimeout(() => { setHurtIndex(action.targetIndex!); audioManager.playSFX('damage'); }, 300);
         setTimeout(() => setHurtIndex(-1), 800);
       }
@@ -243,7 +243,7 @@ const BattleScreen: React.FC<BattleScreenProps> = ({
         const actorState = gameState.characters[action.actorIndex];
         const charDef = CHARACTER_DEFS[actorState.defId];
         const item = action.itemIndex !== undefined ? charDef?.items[action.itemIndex] : undefined;
-        if (item && item.healing && item.healing > 0) {
+        if (item && item.effect.healing && item.effect.healing > 0) {
           audioManager.playSFX('heal');
         } else {
           audioManager.playSFX('spell');

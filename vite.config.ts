@@ -8,6 +8,23 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            'codemirror-core': ['@uiw/react-codemirror'],
+            'codemirror-langs': [
+              '@codemirror/lang-cpp',
+              '@codemirror/lang-java',
+              '@codemirror/lang-javascript',
+              '@codemirror/lang-python',
+            ],
+          },
+        },
+      },
+      chunkSizeWarningLimit: 500,
+    },
     server: {
       proxy: {
         '/api/snowflake': {
