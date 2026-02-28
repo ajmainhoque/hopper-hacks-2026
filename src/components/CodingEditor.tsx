@@ -133,7 +133,7 @@ function ResultPopup({ result, difficulty, onContinue, onExplain }: {
 
         {/* Action buttons */}
         <div style={{ display: 'flex', gap: 10, marginTop: 12, justifyContent: 'center' }}>
-          {!passed && !explanation && !isSystemError && (
+          {!passed && !explanation && (
             <button
               className="pixel-button"
               onClick={handleExplain}

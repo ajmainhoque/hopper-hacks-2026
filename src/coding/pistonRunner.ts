@@ -668,9 +668,17 @@ async function executeFallbackLLM(
       results: evalResult.results,
     };
   } catch (error) {
+    const errMsg = String(error);
+    // If Snowflake PAT isn't configured, give a specific message
+    if (errMsg.includes('not configured')) {
+      return {
+        passed: false, totalTests: tests.length, passedTests: 0, results: [],
+        error: `LLM fallback unavailable: ${errMsg}`,
+      };
+    }
     return {
       passed: false, totalTests: tests.length, passedTests: 0, results: [],
-      error: `Evaluation error: ${error}`,
+      error: `Evaluation error: ${errMsg}`,
     };
   }
 }
