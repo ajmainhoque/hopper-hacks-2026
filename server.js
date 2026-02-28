@@ -11,6 +11,12 @@ const SNOWFLAKE_URL =
   process.env.VITE_SNOWFLAKE_ACCOUNT_URL ||
   'https://VWOAMKM-IBC49184.snowflakecomputing.com';
 
+// Piston API URL — set PISTON_URL to your self-hosted Droplet, e.g. http://<DROPLET_IP>:2000
+const PISTON_URL = process.env.PISTON_URL || 'https://emkc.org';
+const pistonRewrite = PISTON_URL.includes('emkc.org')
+  ? { '^/api/piston': '/api/v2/piston' }
+  : { '^/api/piston': '/api/v2' };
+
 // Proxy /api/snowflake → Snowflake Cortex
 app.use(
   '/api/snowflake',
@@ -26,10 +32,10 @@ app.use(
 app.use(
   '/api/piston',
   createProxyMiddleware({
-    target: 'https://emkc.org',
+    target: PISTON_URL,
     changeOrigin: true,
-    pathRewrite: { '^/api/piston': '/api/v2/piston' },
-    secure: true,
+    pathRewrite: pistonRewrite,
+    secure: PISTON_URL.startsWith('https'),
   }),
 );
 

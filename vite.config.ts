@@ -34,10 +34,16 @@ export default defineConfig(({ mode }) => {
           secure: true,
         },
         '/api/piston': {
-          target: 'https://emkc.org',
+          target: env.PISTON_URL || 'https://emkc.org',
           changeOrigin: true,
-          rewrite: (path: string) => path.replace(/^\/api\/piston/, '/api/v2/piston'),
-          secure: true,
+          rewrite: (path: string) => {
+            const pistonUrl = env.PISTON_URL || 'https://emkc.org';
+            if (pistonUrl.includes('emkc.org')) {
+              return path.replace(/^\/api\/piston/, '/api/v2/piston');
+            }
+            return path.replace(/^\/api\/piston/, '/api/v2');
+          },
+          secure: (env.PISTON_URL || 'https://emkc.org').startsWith('https'),
         },
       },
     },

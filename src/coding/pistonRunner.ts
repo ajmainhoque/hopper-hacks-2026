@@ -729,7 +729,9 @@ export async function executePiston(
     if (!resp.ok) throw new Error(`Piston HTTP ${resp.status}`);
     pistonResp = await resp.json();
   } catch (err) {
-    return { passed: false, totalTests: tests.length, passedTests: 0, results: [], error: `Piston API error: ${err}` };
+    // Piston API unavailable (public API is whitelist-only since 2/15/2026) — fall back to LLM evaluation
+    console.warn(`Piston API unavailable (${err}), falling back to LLM evaluation`);
+    return executeFallbackLLM(userCode, problem, language, tests);
   }
 
   // Check compilation errors
