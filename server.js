@@ -14,8 +14,8 @@ const SNOWFLAKE_URL =
 // Piston API URL — set PISTON_URL to your self-hosted Droplet, e.g. http://<DROPLET_IP>:2000
 const PISTON_URL = process.env.PISTON_URL || 'https://emkc.org';
 const pistonRewrite = PISTON_URL.includes('emkc.org')
-  ? { '^/api/piston': '/api/v2/piston' }
-  : { '^/api/piston': '/api/v2' };
+  ? { '^/': '/api/v2/piston/' }
+  : { '^/': '/api/v2/' };
 
 // Proxy /api/snowflake → Snowflake Cortex
 app.use(
