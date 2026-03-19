@@ -1,26 +1,5 @@
 import { useState, useRef } from "react";
-
-function runUserCode(code, functionName, testInput) {
-  try {
-    // Create a sandboxed function from user code
-    const userFn = new Function(
-      `${code}; return typeof ${functionName} === 'function' ? ${functionName} : undefined;`
-    )();
-    if (typeof userFn !== "function") {
-      return { error: `Function "${functionName}" is not defined.` };
-    }
-    const result = userFn(...testInput);
-    return { result };
-  } catch (err) {
-    return { error: err.message };
-  }
-}
-
-// Compares values for equality. Test cases only use primitives and simple arrays,
-// so JSON.stringify is sufficient and avoids external dependencies.
-function deepEqual(a, b) {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
+import { runWithPiston } from "../utils/pistonApi";
 
 export default function ChallengeScreen({
   challenge,
@@ -35,6 +14,8 @@ export default function ChallengeScreen({
   const [showHint, setShowHint] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [runError, setRunError] = useState(null);
   const textareaRef = useRef(null);
 
   function handleTabKey(e) {
@@ -54,32 +35,31 @@ export default function ChallengeScreen({
     }
   }
 
-  function handleRun() {
-    const results = challenge.tests.map((test) => {
-      const { result, error } = runUserCode(
+  async function handleRun() {
+    setIsRunning(true);
+    setRunError(null);
+    setTestResults(null);
+    setIsSuccess(false);
+    setSuccessMessage("");
+
+    try {
+      const results = await runWithPiston(
         code,
         challenge.functionName,
-        test.input
+        challenge.tests
       );
-      const passed = !error && deepEqual(result, test.expected);
-      return {
-        description: test.description,
-        expected: test.expected,
-        got: error ? `Error: ${error}` : result,
-        passed,
-        error: error || null,
-      };
-    });
 
-    setTestResults(results);
+      setTestResults(results);
 
-    const allPassed = results.every((r) => r.passed);
-    if (allPassed) {
-      setIsSuccess(true);
-      setSuccessMessage(challenge.successQuote);
-    } else {
-      setIsSuccess(false);
-      setSuccessMessage("");
+      const allPassed = results.every((r) => r.passed);
+      if (allPassed) {
+        setIsSuccess(true);
+        setSuccessMessage(challenge.successQuote);
+      }
+    } catch (err) {
+      setRunError(err.message);
+    } finally {
+      setIsRunning(false);
     }
   }
 
@@ -107,9 +87,7 @@ export default function ChallengeScreen({
             Challenge {challengeIndex + 1} / {totalChallenges}
           </span>
         </div>
-        <div className="house-points">
-          ⭐ {totalPoints} House Points
-        </div>
+        <div className="house-points">⭐ {totalPoints} House Points</div>
       </div>
 
       {/* Challenge Info */}
@@ -117,7 +95,12 @@ export default function ChallengeScreen({
         <div className="challenge-left">
           <h2
             className="spell-title"
-            style={{ color: challenge.houseColor === "#0e1a40" ? "#4a90d9" : challenge.houseColor }}
+            style={{
+              color:
+                challenge.houseColor === "#0e1a40"
+                  ? "#4a90d9"
+                  : challenge.houseColor,
+            }}
           >
             🪄 {challenge.spell}
           </h2>
@@ -125,6 +108,14 @@ export default function ChallengeScreen({
           <div className="points-badge">
             Worth {challenge.points} House Points
           </div>
+
+          {/* API Error */}
+          {runError && (
+            <div className="run-error">
+              <span className="run-error-icon">⚠️</span>
+              <pre className="run-error-text">{runError}</pre>
+            </div>
+          )}
 
           {/* Test Cases */}
           {testResults && (
@@ -139,7 +130,9 @@ export default function ChallengeScreen({
                   key={i}
                   className={`test-case ${result.passed ? "pass" : "fail"}`}
                 >
-                  <span className="test-icon">{result.passed ? "✓" : "✗"}</span>
+                  <span className="test-icon">
+                    {result.passed ? "✓" : "✗"}
+                  </span>
                   <span className="test-desc">{result.description}</span>
                   {!result.passed && (
                     <div className="test-got">
@@ -154,7 +147,9 @@ export default function ChallengeScreen({
           {/* Success Message */}
           {isSuccess && (
             <div className="success-banner">
-              <div className="success-sparkle" aria-hidden="true">✨ ✨ ✨</div>
+              <div className="success-sparkle" aria-hidden="true">
+                ✨ ✨ ✨
+              </div>
               <p className="success-quote">{successMessage}</p>
               <button className="btn btn-primary" onClick={handleNext}>
                 {challengeIndex + 1 < totalChallenges
@@ -172,9 +167,7 @@ export default function ChallengeScreen({
             >
               {showHint ? "🙈 Hide Hint" : "💡 Show Hint"}
             </button>
-            {showHint && (
-              <div className="hint-box">{challenge.hint}</div>
-            )}
+            {showHint && <div className="hint-box">{challenge.hint}</div>}
           </div>
 
           {/* Skip */}
@@ -199,13 +192,15 @@ export default function ChallengeScreen({
             spellCheck={false}
             autoCorrect="off"
             autoCapitalize="off"
+            disabled={isRunning}
           />
-          <button className="btn btn-cast" onClick={handleRun}>
-            🪄 Cast Spell (Run Code)
+          <button
+            className="btn btn-cast"
+            onClick={handleRun}
+            disabled={isRunning}
+          >
+            {isRunning ? "⏳ Casting…" : "🪄 Cast Spell (Run Code)"}
           </button>
-          <p className="editor-notice">
-            ⚠️ Code runs in your browser. Only submit spells you trust!
-          </p>
         </div>
       </div>
     </div>
