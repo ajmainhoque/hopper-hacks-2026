@@ -731,7 +731,7 @@ export async function executePiston(
         version: config.version,
         files: [{ name: config.fileName, content: fullCode }],
         compile_timeout: 10000,
-        run_timeout: 5000,
+        run_timeout: 3000,
       }),
     });
     if (!resp.ok) throw new Error(`Piston HTTP ${resp.status}`);
