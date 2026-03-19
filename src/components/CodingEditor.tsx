@@ -52,6 +52,7 @@ function ResultPopup({ result, difficulty, onContinue, onExplain }: {
   // Distinguish system failures (AI can't check) from user code errors
   const isSystemError = isError && !!result.error && (
     result.error.includes('Evaluation error:') ||
+    result.error.includes('LLM fallback unavailable:') ||
     result.error.includes('worker crashed') ||
     result.error.includes('timed out')
   );

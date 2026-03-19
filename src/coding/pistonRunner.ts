@@ -713,11 +713,9 @@ export async function executePiston(
       fullCode = generateCWrapper(userCode, problem.functionName, tests, problem.functionSignature);
     }
   } catch (err) {
-    // If wrapper generation fails (e.g. void C function), fall back to LLM
-    if (language === 'c') {
-      return executeFallbackLLM(userCode, problem, language, tests);
-    }
-    return { passed: false, totalTests: tests.length, passedTests: 0, results: [], error: `Code wrapper error: ${err}` };
+    // If wrapper generation fails, fall back to LLM for all compiled languages
+    console.warn(`Wrapper generation failed for ${language} (${err}), falling back to LLM evaluation`);
+    return executeFallbackLLM(userCode, problem, language, tests);
   }
 
   // Call Piston API
@@ -742,9 +740,20 @@ export async function executePiston(
     return executeFallbackLLM(userCode, problem, language, tests);
   }
 
+  // Guard against unexpected Piston responses (e.g. HTTP 200 with no run object)
+  if (!pistonResp || !pistonResp.run) {
+    console.warn('Unexpected Piston response (missing run object), falling back to LLM evaluation');
+    return executeFallbackLLM(userCode, problem, language, tests);
+  }
+
   // Check compilation errors
   if (pistonResp.compile && pistonResp.compile.code !== 0) {
     const stderr = pistonResp.compile.stderr || pistonResp.compile.output || '';
+    // For Java/C++, a compile error from Piston may be spurious (e.g. wrong runtime version) — try LLM fallback
+    if (language === 'java' || language === 'cpp') {
+      console.warn(`Piston compile error for ${language}, falling back to LLM evaluation:\n${stderr.slice(0, 200)}`);
+      return executeFallbackLLM(userCode, problem, language, tests);
+    }
     return { passed: false, totalTests: tests.length, passedTests: 0, results: [], error: `Compilation error:\n${stderr.slice(0, 500)}` };
   }
 
