@@ -258,8 +258,16 @@ function jsonToJavaLiteral(value: unknown, javaType: string): string {
   if (t === 'double') return formatNum(value as number, true);
   if (t === 'float') return formatNum(value as number, true) + 'f';
   if (t === 'boolean') return value ? 'true' : 'false';
+  if (t === 'char') {
+    const ch = String(value).charAt(0);
+    return ch ? `'${escapeJsonString(ch)}'` : "'\\0'";
+  }
   if (t === 'String') return `"${escapeJsonString(String(value))}"`;
 
+  // char[]
+  if (t === 'char[]' && Array.isArray(value)) {
+    return `new char[]{${(value as unknown[]).map(v => { const ch = String(v).charAt(0); return ch ? `'${escapeJsonString(ch)}'` : "'\\0'"; }).join(', ')}}`;
+  }
   // int[]
   if (t === 'int[]' && Array.isArray(value)) {
     return `new int[]{${(value as number[]).map(v => String(Math.round(v))).join(', ')}}`;
@@ -370,6 +378,7 @@ public class Main {
         return String.valueOf(v);
     }
     static String __toJson(boolean v) { return v ? "true" : "false"; }
+    static String __toJson(char v) { return "\\"" + v + "\\""; }
     static String __toJson(String v) {
         if (v == null) return "null";
         StringBuilder sb = new StringBuilder("\\"");
@@ -386,6 +395,30 @@ public class Main {
         for (int i = 0; i < v.length; i++) {
             if (i > 0) sb.append(", ");
             sb.append(v[i]);
+        }
+        return sb.append("]").toString();
+    }
+    static String __toJson(int[][] v) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < v.length; i++) {
+            if (i > 0) sb.append(", ");
+            sb.append(__toJson(v[i]));
+        }
+        return sb.append("]").toString();
+    }
+    static String __toJson(long[] v) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < v.length; i++) {
+            if (i > 0) sb.append(", ");
+            sb.append(v[i]);
+        }
+        return sb.append("]").toString();
+    }
+    static String __toJson(boolean[] v) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < v.length; i++) {
+            if (i > 0) sb.append(", ");
+            sb.append(v[i] ? "true" : "false");
         }
         return sb.append("]").toString();
     }
@@ -420,8 +453,12 @@ public class Main {
         if (v instanceof Long) return __toJson(((Long) v).longValue());
         if (v instanceof Double) return __toJson(((Double) v).doubleValue());
         if (v instanceof Boolean) return __toJson(((Boolean) v).booleanValue());
+        if (v instanceof Character) return __toJson(((Character) v).charValue());
         if (v instanceof String) return __toJson((String) v);
+        if (v instanceof int[][]) return __toJson((int[][]) v);
         if (v instanceof int[]) return __toJson((int[]) v);
+        if (v instanceof long[]) return __toJson((long[]) v);
+        if (v instanceof boolean[]) return __toJson((boolean[]) v);
         if (v instanceof double[]) return __toJson((double[]) v);
         if (v instanceof String[]) return __toJson((String[]) v);
         if (v instanceof String[][]) return __toJson((String[][]) v);
@@ -714,8 +751,8 @@ export async function executePiston(
       fullCode = generateCWrapper(userCode, problem.functionName, tests, problem.functionSignature);
     }
   } catch (err) {
-    // If wrapper generation fails (e.g. void C function), fall back to LLM
-    if (language === 'c') {
+    // If wrapper generation fails (e.g. void C function, unparseable Java signature), fall back to LLM
+    if (language === 'c' || language === 'java') {
       return executeFallbackLLM(userCode, problem, language, tests);
     }
     return { passed: false, totalTests: tests.length, passedTests: 0, results: [], error: `Code wrapper error: ${err}` };
@@ -748,6 +785,11 @@ export async function executePiston(
 
   // Check compilation errors
   if (pistonResp.compile && pistonResp.compile.code !== 0) {
+    if (language === 'java') {
+      // Java compilation errors may be caused by wrapper bugs — fall back to LLM evaluation
+      console.warn('Java Piston compilation failed, falling back to LLM evaluation');
+      return executeFallbackLLM(userCode, problem, language, tests);
+    }
     const stderr = pistonResp.compile.stderr || pistonResp.compile.output || '';
     return { passed: false, totalTests: tests.length, passedTests: 0, results: [], error: `Compilation error:\n${stderr.slice(0, 500)}` };
   }
